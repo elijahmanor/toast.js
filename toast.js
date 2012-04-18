@@ -57,7 +57,7 @@
                 }
 
                 $toastElement.delay(timeOut)
-                    .fadeOut(config.fadeOut,function () {
+                    .fadeOut(fadeOut,function () {
                         if($toastElement.length)
                             $toastElement.remove()
                 })
