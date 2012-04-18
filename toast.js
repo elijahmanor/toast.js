@@ -1,4 +1,6 @@
 /*
+	By: Hand Fjallemark and John Papa
+	
     Modified to support css styling instead of inline styling
     Original version at https://github.com/Srirangan/notifer.js/
 */
