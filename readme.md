@@ -8,4 +8,4 @@ Copyright © 2012 [Hans Fjällemark](http://twitter.com/hfjallemark) & [John Pap
 
 ## License
 
-toast.js is licensed under [AGPL](http://www.affero.org/oagf.html "Read more about the AGPL license form.").
+toast.js is under MIT license - http://www.opensource.org/licenses/mit-license.php
