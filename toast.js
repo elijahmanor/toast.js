@@ -1,85 +1,94 @@
 // By: Hans Fjällemark and John Papa
+// https://github.com/KnockedUp/toast.js/
 // 
 // Modified to support css styling instead of inline styling
-// Original version at https://github.com/Srirangan/notifer.js/
+// Based on original version at https://github.com/Srirangan/notifer.js/
 
-(function($) {
-    var config = window.toastConfig = {
-        defaultTimeOut: 50000,
-        position: ["top", "right"],
-        container: $("<div class=\"toast\"></div>")
-    }
-    // I let VS indent me here. Now hitting ENTER
-    // I let VS indent me again.
-    // i spaced 4 times
-    // i tabbed once
-    $(document).ready(function() {
-        config.container.css("position", "fixed")
-        config.container.css("z-index", 9999)
-        config.container.css(config.position[0], "12px")
-        config.container.css(config.position[1], "12px")
-        $("body").append(config.container)
-    })
+(function (window, $) {
+    window.toast = (function () {
+        var 
+            $container = $("<div class=\"toast\"></div>"),
+            config = {
+                timeOut: 5000,
+                fadeOut: 300,
+                positionClass: "toast-top-right"
+            },
+            updateContainer = function () {
+                $container.css("position", "fixed")
+                $container.css("z-index", 9999)
+                $container.removeClass('toast-top-right toast-bottom-right toast-bottom-left toast-top-left')
+                $container.addClass(config.positionClass)
+                return $container
+            },
+            init = function () {
+                $("body").append(updateContainer())
+            },
+            getNewToastElement = function () {
+                return $("<div>")
+            },
+            notify = function (message, title, iconClass, timeOut, fadeOut) {
+                updateContainer()
+                var $toastElement = getNewToastElement()
 
-    function getToastElement() {
-        return $("<div>")
-    }
+                timeOut = timeOut || config.timeOut
+                fadeOut = fadeOut || config.fadeOut
 
-    var toast = window.toast = {}
+                if (iconClass) {
+                    $toastElement.addClass(iconClass)
+                }
 
-    toast.notify = function(message, title, iconClass, timeOut) {
-        var toastElement = getToastElement()
+                var textElement = $("<div/>").css({
+                    display: 'inline-block',
+                    verticalAlign: 'middle',
+                    padding: '0 12px'
+                })
 
-        timeOut = timeOut || config.defaultTimeOut
+                if (title) {
+                    var titleElement = $("<div/>")
+                    titleElement.append(document.createTextNode(title))
+                    titleElement.css("font-weight", "bold")
+                    textElement.append(titleElement)
+                }
 
-        if (iconClass) {
-            toastElement.addClass(iconClass)
+                if (message) {
+                    var messageElement = $("<div/>")
+                    messageElement.append(document.createTextNode(message))
+                    textElement.append(messageElement)
+                }
+
+                $toastElement.delay(timeOut)
+                    .fadeOut(config.fadeOut,function () {
+                        if($toastElement.length)
+                            $toastElement.remove()
+                })
+
+                $toastElement.bind("click", function () {
+                    $toastElement.hide()
+                })
+
+                $toastElement.append(textElement)
+                $container.prepend($toastElement)
+            },
+            info = function (message, title) {
+                notify(message, title, 'info')
+            },
+            warning = function (message, title) {
+                notify(message, title, 'warning')
+            },
+            error = function (message, title) {
+                notify(message, title, 'error')
+            },
+            success = function (message, title) {
+                notify(message, title, 'success')
+            }
+            init() // Initialize the config settings
+        return {
+            config: config,
+            notify: notify,
+            info: info,
+            warning: warning,
+            error: error,
+            success: success
         }
-
-        var textElement = $("<div/>").css({
-            display: 'inline-block',
-            verticalAlign: 'middle',
-            padding: '0 12px'
-        })
-
-        if (title) {
-            var titleElement = $("<div/>")
-            titleElement.append(document.createTextNode(title))
-            titleElement.css("font-weight", "bold")
-            textElement.append(titleElement)
-        }
-
-        if (message) {
-            var messageElement = $("<div/>")
-            messageElement.append(document.createTextNode(message))
-            textElement.append(messageElement)
-        }
-
-        toastElement.delay(timeOut).fadeOut(function() {
-            toastElement.remove()
-        })
-
-        toastElement.bind("click", function() {
-            toastElement.hide()
-        })
-
-        toastElement.append(textElement)
-        config.container.prepend(toastElement)
-    }
-
-    toast.info = function(message, title) {
-        toast.notify(message, title, 'info')
-    }
-
-    toast.warning = function(message, title) {
-        toast.notify(message, title, 'warning')
-    }
-
-    toast.error = function(message, title) {
-        toast.notify(message, title, 'error')
-    }
-
-    toast.success = function(message, title) {
-        toast.notify(message, title, 'success')
-    }
-}(jQuery))
+    })()
+} (window, jQuery))
