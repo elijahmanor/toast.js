@@ -1,9 +1,7 @@
-/*
-	By: Hand Fjallemark and John Papa
-	
-    Modified to support css styling instead of inline styling
-    Original version at https://github.com/Srirangan/notifer.js/
-*/
+// By: Hans Fjällemark and John Papa
+// 
+// Modified to support css styling instead of inline styling
+// Original version at https://github.com/Srirangan/notifer.js/
 
 (function($) {
     var config = window.toastConfig = {
@@ -11,7 +9,10 @@
         position: ["top", "right"],
         container: $("<div class=\"toast\"></div>")
     }
-
+    // I let VS indent me here. Now hitting ENTER
+    // I let VS indent me again.
+    // i spaced 4 times
+    // i tabbed once
     $(document).ready(function() {
         config.container.css("position", "fixed")
         config.container.css("z-index", 9999)
